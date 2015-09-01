@@ -6,6 +6,7 @@
 
 require 'torch'
 require 'nn'
+require 'nngraph'
 require 'graph'
 
 -- nngraph overloads the call operator (i.e. () operator used for function calls) on all
@@ -29,11 +30,9 @@ x2 = nn.Identity()()
 x3 = nn.Identity()()
 
 -- modeling output = x1 + x2 cmul linear(x3)
-l3 = nn.Linear(params.x3_size1, params.x3_size2)(x1)
+l3 = nn.Linear(params.x3_size1, params.x3_size2)(x3)
 m23 = nn.CMulTable()({x2,l3})
 add = nn.CAddTable()({x1, m23})
 
 -- specify the inputs and outputs of the graph
 m = nn.gModule({x1,x2,x3}, {add})
-
-graph.dot(mlp.fg, "mlp")
